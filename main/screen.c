@@ -66,6 +66,9 @@ void screen_init(scr_driver_t* s_lcd, SemaphoreHandle_t semaphore) {
     lcd_cfg.rotate = SCR_SWAP_XY;
     s_lcd->init(&lcd_cfg);
 
+	gpio_pad_select_gpio(LCD_TE_PIN);
+	gpio_set_direction(LCD_TE_PIN, GPIO_MODE_INPUT);
+
     if (LCD_BL_PIN > -1) {
         gpio_pad_select_gpio(LCD_BL_PIN);
         gpio_set_level(LCD_BL_PIN, 0);

@@ -71,6 +71,12 @@ static void lvgl_touch_init(void)
 
 static void lvgl_drv_flush(lv_disp_drv_t *drv, const lv_area_t *area, lv_color_t *color_map)
 {
+    while( gpio_get_level(LCD_TE_PIN) == 0) {
+        if ((area->x2 - area->x1 + 1) * (area->y2 - area->y1 + 1) >= 480 * 80)
+            break;
+        taskYIELD();
+    }
+
     g_lcd.draw_bitmap(area->x1, area->y1, (uint16_t)(area->x2 - area->x1 + 1), (uint16_t)(area->y2 - area->y1 + 1), (uint16_t *)color_map);
     /* IMPORTANT!!!
      * Inform the graphics library that you are ready with the flushing*/
